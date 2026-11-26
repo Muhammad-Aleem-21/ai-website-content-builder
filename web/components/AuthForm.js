@@ -25,8 +25,8 @@ export default function AuthForm({ mode }) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Something went wrong");
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`);
 
       // Only allow redirects to paths inside this site.
       const next = new URLSearchParams(window.location.search).get("next");

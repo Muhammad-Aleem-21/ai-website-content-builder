@@ -8,7 +8,9 @@ if (!cached) cached = globalThis._mongoose = { conn: null, promise: null };
 export async function connectDB() {
   if (cached.conn) return cached.conn;
   if (!process.env.MONGODB_URI) throw new Error("MONGODB_URI is not set");
-  cached.promise ??= mongoose.connect(process.env.MONGODB_URI);
+  cached.promise ??= mongoose.connect(process.env.MONGODB_URI, {
+    serverSelectionTimeoutMS: 5000,
+  });
   try {
     cached.conn = await cached.promise;
   } catch (err) {
